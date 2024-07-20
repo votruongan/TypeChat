@@ -20,8 +20,9 @@ export async function parseOut(request: string, surl: string) {
     }
 }
 
-export function localParser(userPrompt: string) {
-    userPrompt = userPrompt.trim();
+export function localParser(rawPrompt: string) {
+    const trimmedPrompt = rawPrompt.trim();
+    const userPrompt = lowerCasedFirstWord(trimmedPrompt);
     const surl = process.env.PARSER_SERVICE_ENDPOINT;
     if (surl) {
        parseOut(userPrompt, surl);
@@ -87,4 +88,11 @@ export function localParser(userPrompt: string) {
         }
     }
     return undefined;
+}
+
+function lowerCasedFirstWord(input: string): string {
+    const allWords = input.split(' ');
+    const lowerFirstWord = allWords[0].toLocaleLowerCase();
+    const newWords = [lowerFirstWord].concat(allWords.slice(1))
+    return newWords.join(' '); 
 }
